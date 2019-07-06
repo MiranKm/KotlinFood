@@ -1,4 +1,4 @@
-package project.miran.com.kotlinmovies
+package project.miran.com.kotlinfood
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

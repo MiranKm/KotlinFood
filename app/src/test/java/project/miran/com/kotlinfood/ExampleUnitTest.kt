@@ -1,4 +1,4 @@
-package project.miran.com.kotlinmovies
+package project.miran.com.kotlinfood
 
 import org.junit.Test
 

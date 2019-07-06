@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/foodsFragment"
+        android:icon="@drawable/ic_kitchen_black_24dp"
+        android:title="@string/foods" />
+    <item
+        android:id="@+id/saveFragment"
+        android:icon="@drawable/ic_folder_special_black_24dp"
+        android:title="@string/save" />
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/search" />
+</menu>
