@@ -4,16 +4,16 @@
             xmlns:tools="http://schemas.android.com/tools" android:id="@+id/main_nav"
     app:startDestination="@id/foodsFragment">
 
-    <fragment android:id="@+id/foodsFragment" android:name="project.miran.com.kotlinfood.FoodsFragment"
+    <fragment android:id="@+id/foodsFragment" android:name="project.miran.com.kotlinfood.fragments.FoodsFragment"
               android:label="foods_fragment" tools:layout="@layout/foods_fragment"/>
     <fragment
         android:id="@+id/saveFragment"
-        android:name="project.miran.com.kotlinfood.SavedFragment"
+        android:name="project.miran.com.kotlinfood.fragments.SavedFragment"
         android:label="saved_fragment"
         tools:layout="@layout/saved_fragment" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="project.miran.com.kotlinfood.SearchFragment"
+        android:name="project.miran.com.kotlinfood.fragments.SearchFragment"
         android:label="search_fragment"
         tools:layout="@layout/search_fragment" />
 </navigation>

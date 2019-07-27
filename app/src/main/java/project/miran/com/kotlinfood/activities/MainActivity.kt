@@ -1,4 +1,4 @@
-package project.miran.com.kotlinfood
+package project.miran.com.kotlinfood.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import project.miran.com.kotlinfood.R
 
 class MainActivity : AppCompatActivity() {
 

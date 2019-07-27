@@ -1,4 +1,4 @@
-package project.miran.com.kotlinfood
+package project.miran.com.kotlinfood.view_models
 
 import androidx.lifecycle.ViewModel;
 
