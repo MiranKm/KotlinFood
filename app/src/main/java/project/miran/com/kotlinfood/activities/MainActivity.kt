@@ -8,6 +8,8 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import project.miran.com.kotlinfood.R
+import com.google.gson.annotations.SerializedName
+
 
 class MainActivity : AppCompatActivity() {
 
