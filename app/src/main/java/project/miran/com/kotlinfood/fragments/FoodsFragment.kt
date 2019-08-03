@@ -1,18 +1,16 @@
-package fragments
+package project.miran.com.kotlinfood.fragments
 
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
-import android.widget.TextView
-import android.widget.TextView.OnEditorActionListener
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -67,36 +65,39 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
         constraintSetEnd.clone(context, R.layout.foods_fragment_alt)
 
         searchBtn.setOnClickListener {
-            view.progress_bar.show()
-            if (!editQuery.text.toString().trim().isEmpty()) {
-                val apiCalls =
-                    ServiceCreator.instance.getFood(editQuery.text.toString().trim()).enqueue(object : Callback<Food> {
-                        override fun onFailure(call: Call<Food>, t: Throwable) {
-                            Log.d("tag", "message ${t.message}")
-                        }
-
-                        override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                            view.progress_bar.hide()
-                            editQuery.clearFocus()
-                            val adapter = FoodRvAdapter(response.body()!!.recipes, context!!)
-                            recycler.adapter = adapter
-
-//                view.foods.text = response.body()!!.recipes[0].title
-                        }
-
-                    })
-            } else Toast.makeText(context, "Can't be empty", Toast.LENGTH_SHORT).show()
-
-
-
-
+            getData(recycler)
         }
 
-      
 
-
+        editQuery.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
+                getData(recycler)
+                editQuery.clearFocus()
+            }
+            false
+        }
 
         return view;
+    }
+
+    private fun getData(recycler: RecyclerView) {
+        view!!.progress_bar.visibility = ProgressBar.VISIBLE
+        if (!editQuery.text.toString().trim().isEmpty()) {
+            val apiCalls =
+                ServiceCreator.instance.getFood(editQuery.text.toString().trim()).enqueue(object : Callback<Food> {
+                    override fun onFailure(call: Call<Food>, t: Throwable) {
+                        Log.d("tag", "message ${t.message}")
+                    }
+
+                    override fun onResponse(call: Call<Food>, response: Response<Food>) {
+                        editQuery.clearFocus()
+                        val adapter = FoodRvAdapter(response.body()!!.recipes, context!!)
+                        recycler.adapter = adapter
+                        view!!.progress_bar.visibility = ProgressBar.GONE
+                    }
+
+                })
+        } else Toast.makeText(context, "Can't be empty", Toast.LENGTH_SHORT).show()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
