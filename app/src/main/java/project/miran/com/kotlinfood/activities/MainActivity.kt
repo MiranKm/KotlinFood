@@ -1,6 +1,7 @@
 package project.miran.com.kotlinfood.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -8,7 +9,11 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import project.miran.com.kotlinfood.R
-import com.google.gson.annotations.SerializedName
+import project.miran.com.kotlinfood.models.Food
+import project.miran.com.kotlinfood.network.ServiceCreator
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.container)
         bottom_nav.setupWithNavController(navController)
+
+
 
 //        NavigationUI.setupActionBarWithNavController(this, navController)
     }
