@@ -39,7 +39,7 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
     private val constraintSetEnd = ConstraintSet()
     private lateinit var viewModel: FoodsViewModel
     private lateinit var searchBtn: MaterialButton
-
+    private lateinit var adapter: FoodRvAdapter
 
     companion object {
         fun newInstance() = FoodsFragment()
@@ -52,6 +52,7 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
     ): View? {
 
         val view = inflater.inflate(R.layout.foods_fragment, container, false)
+        adapter = FoodRvAdapter(context!!)
 
         searchBtn = view.findViewById(R.id.search_btn)
         val recycler: RecyclerView = view.findViewById(R.id.recycler)
@@ -65,34 +66,37 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
         constraintSetEnd.clone(context, R.layout.foods_fragment_alt)
 
         searchBtn.setOnClickListener {
-            getData(recycler)
+            view!!.progress_bar.visibility = ProgressBar.VISIBLE
+            getData()
         }
 
 
         editQuery.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
-                getData(recycler)
+                view!!.progress_bar.visibility = ProgressBar.VISIBLE
+                getData()
                 editQuery.clearFocus()
             }
             false
         }
+        recycler.adapter = adapter
 
         return view;
     }
 
-    private fun getData(recycler: RecyclerView) {
-        view!!.progress_bar.visibility = ProgressBar.VISIBLE
+    private fun getData() {
         if (!editQuery.text.toString().trim().isEmpty()) {
             val apiCalls =
                 ServiceCreator.instance.getFood(editQuery.text.toString().trim()).enqueue(object : Callback<Food> {
                     override fun onFailure(call: Call<Food>, t: Throwable) {
                         Log.d("tag", "message ${t.message}")
+                        editQuery.clearFocus()
+                        view!!.progress_bar.visibility = ProgressBar.GONE
                     }
 
                     override fun onResponse(call: Call<Food>, response: Response<Food>) {
                         editQuery.clearFocus()
-                        val adapter = FoodRvAdapter(response.body()!!.recipes, context!!)
-                        recycler.adapter = adapter
+                        adapter.addItem(response.body()?.recipes)
                         view!!.progress_bar.visibility = ProgressBar.GONE
                     }
 
