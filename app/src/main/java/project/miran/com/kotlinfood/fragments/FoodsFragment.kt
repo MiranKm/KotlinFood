@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.foods_fragment.view.*
@@ -57,7 +57,7 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
         searchBtn = view.findViewById(R.id.search_btn)
         val recycler: RecyclerView = view.findViewById(R.id.recycler)
         recycler.setHasFixedSize(false)
-        recycler.layoutManager = LinearLayoutManager(context)
+        recycler.layoutManager = GridLayoutManager(context, 2)
         editQuery = view.findViewById(R.id.edit_query)
         editQuery.onFocusChangeListener = this
         layout = view.findViewById(R.id.layout)

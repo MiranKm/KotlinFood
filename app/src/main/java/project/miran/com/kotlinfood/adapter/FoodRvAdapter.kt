@@ -55,7 +55,7 @@ class FoodRvAdapter(private val context: Context) :
 
         fun setData(recipeList: List<Recipe>) {
             title.text = recipeList[adapterPosition].title
-            Glide.with(itemView).load(recipeList[adapterPosition].imageUrl).into(image)
+            Glide.with(itemView).load(recipeList[adapterPosition].imageUrl).centerCrop().into(image)
         }
 
     }
