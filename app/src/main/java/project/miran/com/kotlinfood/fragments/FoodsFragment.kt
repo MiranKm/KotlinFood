@@ -3,7 +3,6 @@ package project.miran.com.kotlinfood.fragments
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +10,10 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AutoCompleteTextView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,12 +21,7 @@ import com.google.android.material.button.MaterialButton
 import kotlinx.android.synthetic.main.foods_fragment.view.*
 import project.miran.com.kotlinfood.R
 import project.miran.com.kotlinfood.adapter.FoodRvAdapter
-import project.miran.com.kotlinfood.models.Food
-import project.miran.com.kotlinfood.network.ServiceCreator
 import project.miran.com.kotlinfood.view_models.FoodsViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListener {
@@ -50,6 +44,7 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel = ViewModelProviders.of(this).get(FoodsViewModel::class.java)
 
         val view = inflater.inflate(R.layout.foods_fragment, container, false)
         adapter = FoodRvAdapter(context!!)
@@ -67,46 +62,40 @@ class FoodsFragment : Fragment(), View.OnClickListener, View.OnFocusChangeListen
 
         searchBtn.setOnClickListener {
             view!!.progress_bar.visibility = ProgressBar.VISIBLE
-            getData()
+            viewModel.getData("pizza")
         }
+
+        viewModel.getRecipeList().observe(this, Observer {
+            adapter.addItem(it)
+        })
 
 
         editQuery.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) {
                 view!!.progress_bar.visibility = ProgressBar.VISIBLE
-                getData()
+                viewModel.getData("pizza")
+
+
                 editQuery.clearFocus()
+
             }
             false
         }
+
         recycler.adapter = adapter
 
         return view;
     }
 
-    private fun getData() {
-        if (!editQuery.text.toString().trim().isEmpty()) {
-            val apiCalls =
-                ServiceCreator.instance.getFood(editQuery.text.toString().trim()).enqueue(object : Callback<Food> {
-                    override fun onFailure(call: Call<Food>, t: Throwable) {
-                        Log.d("tag", "message ${t.message}")
-                        editQuery.clearFocus()
-                        view!!.progress_bar.visibility = ProgressBar.GONE
-                    }
+    override fun onResume() {
+        super.onResume()
 
-                    override fun onResponse(call: Call<Food>, response: Response<Food>) {
-                        editQuery.clearFocus()
-                        adapter.addItem(response.body()?.recipes)
-                        view!!.progress_bar.visibility = ProgressBar.GONE
-                    }
-
-                })
-        } else Toast.makeText(context, "Can't be empty", Toast.LENGTH_SHORT).show()
     }
+
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FoodsViewModel::class.java)
     }
 
     override fun onClick(v: View?) {
